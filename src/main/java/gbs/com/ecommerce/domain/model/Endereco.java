@@ -1,18 +1,17 @@
 package gbs.com.ecommerce.domain.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@Table
 @Entity
+@Table(name = "tb_endereco")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -35,4 +34,7 @@ public class Endereco {
     private String gia;
     private String ddd;
     private String siafi;
+
+    @OneToMany(mappedBy = "endereco", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UsuarioEndereco> usuarioEnderecos = new ArrayList<>();
 }
