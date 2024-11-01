@@ -7,11 +7,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class EnderecoDTO {
+public class EnderecoResponseDTO implements Serializable {
 
     @NotEmpty(message = "O campo CEP é obrigatório")
     @Size(min = 8, max = 8, message = "O campo CEP deve conter 8 caracteres")

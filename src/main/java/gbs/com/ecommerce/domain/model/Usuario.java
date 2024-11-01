@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Usuario {
+public class Usuario implements Serializable {
 
     @Id
     private String id = UUID.randomUUID().toString();
@@ -31,7 +32,7 @@ public class Usuario {
     private String senha;
 
     @Column(unique = true)
-    private String tipoDocumento;
+    private String documento;
     @Column(unique = true)
     private String rg;
     private String telefone;

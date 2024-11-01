@@ -6,7 +6,7 @@ import gbs.com.ecommerce.infrastructure.client.ViaCepClient;
 import gbs.com.ecommerce.infrastructure.gateway.IEnderecoGateway;
 import gbs.com.ecommerce.infrastructure.mapper.Formatter;
 import gbs.com.ecommerce.infrastructure.mapper.MapperUtil;
-import gbs.com.ecommerce.presentation.dto.EnderecoDTO;
+import gbs.com.ecommerce.presentation.dto.EnderecoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,45 +22,45 @@ public class EnderecoUseCase implements IEnderecoUseCase {
     private final IEnderecoGateway enderecoGateway;
     private final ViaCepClient viaCepClient;
 
-    public Page<EnderecoDTO> findAllPaged(Pageable pageable) {
+    public Page<EnderecoResponseDTO> findAllPaged(Pageable pageable) {
         log.info("Buscando endereços paginados");
         return enderecoGateway.findAllPaged(pageable)
-                .map(endereco -> MapperUtil.converte(endereco, EnderecoDTO.class));
+                .map(endereco -> MapperUtil.converte(endereco, EnderecoResponseDTO.class));
     }
 
-    public List<EnderecoDTO> findAll() {
+    public List<EnderecoResponseDTO> findAll() {
         log.info("Buscando lista de endereços");
-        return enderecoGateway.findAll().stream().map(endereco -> MapperUtil.converte(endereco, EnderecoDTO.class)).toList();
+        return enderecoGateway.findAll().stream().map(endereco -> MapperUtil.converte(endereco, EnderecoResponseDTO.class)).toList();
     }
 
-    public EnderecoDTO findByCep(String cep) {
+    public EnderecoResponseDTO findByCep(String cep) {
         log.info("Buscando cep {}", cep);
         return enderecoGateway.findByCep(Formatter.formatCepWithHyphen(cep))
-                .map(endereco -> MapperUtil.converte(endereco, EnderecoDTO.class))
+                .map(endereco -> MapperUtil.converte(endereco, EnderecoResponseDTO.class))
                 .orElseGet(() -> {
                     Endereco endereco = findCepAndSave(cep);
-                    return MapperUtil.converte(endereco, EnderecoDTO.class);
+                    return MapperUtil.converte(endereco, EnderecoResponseDTO.class);
                 });
     }
 
-    public EnderecoDTO save(EnderecoDTO endereco) {
+    public EnderecoResponseDTO save(EnderecoResponseDTO endereco) {
         return MapperUtil.converte(
                 enderecoGateway.save(
                         MapperUtil.converte(endereco, Endereco.class)),
-                EnderecoDTO.class);
+                EnderecoResponseDTO.class);
     }
 
-    public EnderecoDTO update(EnderecoDTO enderecoDTO, String id) {
+    public EnderecoResponseDTO update(EnderecoResponseDTO enderecoResponseDTO, String id) {
         Endereco endereco = enderecoGateway.findById(id).get();
         endereco.setId(id);
-        MapperUtil.copyEntity(enderecoDTO, endereco);
-        return MapperUtil.converte(enderecoGateway.save(endereco), EnderecoDTO.class);
+        MapperUtil.copyEntity(enderecoResponseDTO, endereco);
+        return MapperUtil.converte(enderecoGateway.save(endereco), EnderecoResponseDTO.class);
     }
 
-    public EnderecoDTO findById(final String id) {
+    public EnderecoResponseDTO findById(final String id) {
         return MapperUtil.converte(enderecoGateway.findById(id)
                 .orElseThrow(() -> new DatabaseException(String.format("Cep com ID: %S não encontrado", id))
-                ), EnderecoDTO.class);
+                ), EnderecoResponseDTO.class);
     }
 
     public void deleteByCep(String cep) {
@@ -75,7 +75,7 @@ public class EnderecoUseCase implements IEnderecoUseCase {
 
     private Endereco findCepAndSave(final String cep) {
         log.info("Buscando {} no viaCep", cep);
-        EnderecoDTO enderecoByCep = viaCepClient.getEnderecoByCep(cep);
+        EnderecoResponseDTO enderecoByCep = viaCepClient.getEnderecoByCep(cep);
         log.info("Salvando {}", cep);
         return enderecoGateway.save(MapperUtil.converte(enderecoByCep, Endereco.class));
     }

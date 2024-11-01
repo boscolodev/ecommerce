@@ -1,7 +1,7 @@
 package gbs.com.ecommerce.presentation.controller;
 
 import gbs.com.ecommerce.application.usecase.EnderecoUseCase;
-import gbs.com.ecommerce.presentation.dto.EnderecoDTO;
+import gbs.com.ecommerce.presentation.dto.EnderecoResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +16,12 @@ public class EnderecoController {
     private final EnderecoUseCase enderecoUseCase;
 
     @GetMapping("/cep/{cep}")
-    public EnderecoDTO findCep(@PathVariable final String cep){
+    public EnderecoResponseDTO findCep(@PathVariable final String cep){
         return enderecoUseCase.findByCep(cep);
     }
 
     @GetMapping("/id/{id}")
-    public EnderecoDTO findById(@PathVariable final String id){
+    public EnderecoResponseDTO findById(@PathVariable final String id){
         return enderecoUseCase.findById(id);
     }
 }

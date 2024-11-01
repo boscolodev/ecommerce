@@ -4,7 +4,7 @@ CREATE TABLE tb_usuario (
                             sobrenome VARCHAR(255) UNIQUE NOT NULL,
                             email VARCHAR(255) UNIQUE NOT NULL,
                             senha VARCHAR(255) NOT NULL,
-                            tipo_documento VARCHAR(255) UNIQUE NOT NULL,
+                            documento VARCHAR(255) UNIQUE NOT NULL,
                             rg VARCHAR(255) UNIQUE NOT NULL,
                             telefone VARCHAR(255),
                             celular VARCHAR(255),
